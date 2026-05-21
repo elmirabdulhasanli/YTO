@@ -19,42 +19,26 @@ Projemizin refactoring sürecinde aşağıdaki tasarım örüntüleri kullanılm
 
 ---
 
-## Proje Klasör Yapısı
-
-```text
-src/
-├── Algorithms/       # AES, RSA ve Base64 şifreleme sınıfları
-├── Core/             # Temel arayüzler (IEncryptor)
-├── Decorators/       # Şifreleme işlemlerine ek davranış katan sarmalayıcılar (Logging vb.)
-├── Facade/           # Karmaşıklığı gizleyen basit kullanım servisi
-├── Factory/          # Nesne yaratımından sorumlu fabrika sınıfı
-├── Legacy/           # Örüntüler uygulanmadan önceki kötü "God Class" kodu (EncryptionProvider)
-├── Observers/        # Sistemi dinleyen Observer sınıfları (Log ve Admin)
-└── Strategy/         # Strateji mantığını yürüten Context sınıfı (EncryptionContext)
-```
-
----
-
 ## Final Mimari UML Diyagramı
 
 ```mermaid
 classDiagram
     class IEncryptor {
-        <<interface>>
         +Encrypt(string data) string
         +Decrypt(string data) string
     }
+    <<interface>> IEncryptor
 
     class EncryptorFactory {
         +CreateEncryptor(string algorithmType) IEncryptor
     }
 
     class EncryptorDecorator {
-        <<abstract>>
         #IEncryptor _wrappee
         +Encrypt(string data) string
         +Decrypt(string data) string
     }
+    <<abstract>> EncryptorDecorator
 
     class LoggingDecorator {
         +Encrypt(string data) string
@@ -70,9 +54,9 @@ classDiagram
     }
 
     class IObserver {
-        <<interface>>
         +Update(string eventName, string message)
     }
+    <<interface>> IObserver
 
     class EncryptionFacade {
         -EncryptorFactory _factory
